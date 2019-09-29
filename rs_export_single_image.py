@@ -44,16 +44,16 @@ try:
         color_frame = frames.get_color_frame()
 
         # Colorize depth frame to jet colormap
-        # depth_color_frame = colorizer.colorize(depth_frame)
-        depth_color_frame = depth_frame
+        depth_color_frame = colorizer.colorize(depth_frame)
+        # depth_color_frame = depth_frame
 
 
         # Convert depth_frame to numpy array to render image in opencv
-        print(np.asanyarray(depth_color_frame.get_data()).shape)
-        print(np.asanyarray(depth_color_frame.get_data()).dtype)
+        # print(np.asanyarray(depth_color_frame.get_data()).shape)
+        # print(np.asanyarray(depth_color_frame.get_data()).dtype)
 
         depth_color_image = np.asanyarray(depth_color_frame.get_data())
-        depth_color_image = cv2.applyColorMap(cv2.convertScaleAbs(depth_color_image, alpha=0.03), cv2.COLORMAP_JET)
+        # depth_color_image = cv2.applyColorMap(cv2.convertScaleAbs(depth_color_image, alpha=0.03), cv2.COLORMAP_JET)
         color_image = np.asanyarray(color_frame.get_data())
         color_image = cv2.cvtColor(color_image, cv2.COLOR_BGR2RGB)
 
@@ -80,20 +80,20 @@ try:
         # out.write(combined)
         key = cv2.waitKey(1)
 
-        # if i == 50:
-        #     np.save(f'./realsense_images/color_{outfile}.npy', color_image)
-        #     np.save(f'./realsense_images/depth_{outfile}.npy', depth_color_image)
-        #     cv2.destroyAllWindows()
-        #     break
-
-        # if pressed escape exit program
-        if key == 112: # p
+        if i == 50:
             np.save(f'./realsense_images/color_{outfile}.npy', color_image)
             np.save(f'./realsense_images/depth_{outfile}.npy', depth_color_image)
-        elif key == 27:
-            # out.release()
             cv2.destroyAllWindows()
             break
+
+        # if pressed escape exit program
+        # if key == 112: # p
+        #     np.save(f'./realsense_images/color_{outfile}.npy', color_image)
+        #     np.save(f'./realsense_images/depth_{outfile}.npy', depth_color_image)
+        # elif key == 27:
+        #     # out.release()
+        #     cv2.destroyAllWindows()
+        #     break
 
         i += 1
 

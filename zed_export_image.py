@@ -77,10 +77,10 @@ def main():
             cv2.imshow("ZED", depth_color_image)
             key = cv2.waitKey(1)
 
-            # if i == 50:
-            #     np.save(f'./zed_images/color_{outfile}.npy', color_image)
-            #     np.save(f'./zed_images/depth_{outfile}.npy', depth_color_image)
-            #     break
+            if i == 500:
+                np.save(f'./zed_images/color_{outfile}.npy', color_image)
+                np.save(f'./zed_images/depth_{outfile}.npy', depth_color_image)
+                break
         else:
             key = cv2.waitKey(1)
 

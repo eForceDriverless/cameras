@@ -24,6 +24,7 @@ try:
 
     # Create opencv window to render image in
     cv2.namedWindow("Depth Stream", cv2.WINDOW_AUTOSIZE)
+    # cv2.resizeWindow("Depth Stream", 640*2, 480)
     
     # Create colorizer object
     colorizer = rs.colorizer()
@@ -58,6 +59,9 @@ try:
         color_image = cv2.cvtColor(color_image, cv2.COLOR_BGR2RGB)
 
         # print(color_image.shape)
+        # print(depth_color_image.shape)
+
+        # print(color_image.shape)
         # print(color_image.dtype)
 
 
@@ -68,7 +72,18 @@ try:
         # combined = np.concatenate((color_image, depth_color_image), axis=1)
         # print(combined.shape)
 
-        # print(depth_frame.get_frame_metadata(rs.frame_metadata_value.actual_fps))
+        color_fps = color_frame.get_frame_metadata(rs.frame_metadata_value.actual_fps)
+        depth_fps = depth_frame.get_frame_metadata(rs.frame_metadata_value.actual_fps)
+
+
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        cv2.putText(color_image, f'FPS: {color_fps}', (10, 35), font, 1, (0, 0, 255), 2, cv2.LINE_AA)
+        cv2.putText(depth_color_image, f'FPS: {depth_fps}', (10, 35), font, 1, (0, 0, 255), 2, cv2.LINE_AA)
+
+
+        color_image = cv2.resize(color_image, dsize=(640, 360), interpolation = cv2.INTER_AREA)
+        depth_color_image = cv2.resize(depth_color_image, dsize=(640, 360), interpolation = cv2.INTER_AREA)
+
 
         # profile = pipeline.get_active_profile()
         # depth_profile = rs.video_stream_profile(profile.get_stream(rs.stream.depth))
@@ -76,24 +91,26 @@ try:
         # print(depth_intrinsics)
 
         # Render image in opencv window
-        cv2.imshow("Depth Stream", depth_color_image)
+        cv2.imshow("Depth Stream", np.hstack((color_image, depth_color_image)))
         # out.write(combined)
-        key = cv2.waitKey(1)
+        # key = cv2.waitKey(1)
 
-        if i == 50:
-            np.save(f'./realsense_images/color_{outfile}.npy', color_image)
-            np.save(f'./realsense_images/depth_{outfile}.npy', depth_color_image)
-            cv2.destroyAllWindows()
-            break
+        # if i == 50:
+        #     np.save(f'./realsense_images/color_{outfile}.npy', color_image)
+        #     np.save(f'./realsense_images/depth_{outfile}.npy', depth_color_image)
+        #     cv2.destroyAllWindows()
+        #     break
+        key = cv2.waitKey(1)
 
         # if pressed escape exit program
         # if key == 112: # p
-        #     np.save(f'./realsense_images/color_{outfile}.npy', color_image)
-        #     np.save(f'./realsense_images/depth_{outfile}.npy', depth_color_image)
-        # elif key == 27:
-        #     # out.release()
-        #     cv2.destroyAllWindows()
-        #     break
+            # pass
+            # np.save(f'./realsense_images/color_{outfile}.npy', color_image)
+            # np.save(f'./realsense_images/depth_{outfile}.npy', depth_color_image)
+        if key == 27 or key == 113:
+            # out.release()
+            cv2.destroyAllWindows()
+            break
 
         i += 1
 

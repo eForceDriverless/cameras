@@ -38,7 +38,7 @@ def main():
 
     i = 0
     key = ''
-    while key != 113:  # for 'q' key
+    while key != 113 and key != 27:  # for 'q' key
         err = zed.grab(runtime)
         if err == sl.ERROR_CODE.SUCCESS:
             zed.retrieve_image(color)
@@ -74,13 +74,19 @@ def main():
 
             # print(img_gray.shape)
 
-            cv2.imshow("ZED", depth_color_image)
+            current_fps = round(zed.get_current_fps())
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            # print(color_image.shape)
+            color_image = np.array(color_image, dtype=np.uint8)
+            cv2.putText(color_image, f'FPS: {current_fps}', (10, 35), font, 1, (0, 0, 255), 2, cv2.LINE_AA)
+
+            cv2.imshow("ZED", np.hstack((color_image, depth_color_image)))
             key = cv2.waitKey(1)
 
-            if i == 500:
-                np.save(f'./zed_images/color_{outfile}.npy', color_image)
-                np.save(f'./zed_images/depth_{outfile}.npy', depth_color_image)
-                break
+            # if i == 500:
+            #     np.save(f'./zed_images/color_{outfile}.npy', color_image)
+            #     np.save(f'./zed_images/depth_{outfile}.npy', depth_color_image)
+            #     break
         else:
             key = cv2.waitKey(1)
 

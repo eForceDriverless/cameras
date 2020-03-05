@@ -17,7 +17,7 @@ devices_sn = [x.get_info(rs.camera_info.serial_number) for x in devices]
 [x.hardware_reset() for x in devices]
 
 # Now sleep and wait for startup
-time.sleep(2)
+time.sleep(5)
 
 pipeline1 = rs.pipeline()
 config1 = rs.config()
@@ -35,8 +35,8 @@ profile2 = pipeline2.start(config2)
 
 try:
     init_params = sl.InitParameters()
-    init_params.camera_resolution = sl.RESOLUTION.RESOLUTION_VGA
-    init_params.depth_mode = sl.DEPTH_MODE.DEPTH_MODE_PERFORMANCE
+    init_params.camera_resolution = sl.RESOLUTION.RESOLUTION_HD1080
+    init_params.depth_mode = sl.DEPTH_MODE.DEPTH_MODE_NONE
     init_params.camera_fps = 30
     init_params.sdk_verbose = True
     # init_params.coordinate_units = sl.UNIT.UNIT_MILLIMETER  # Use milliliter units (for depth measurements)
@@ -120,9 +120,9 @@ try:
         color_image = np.array(color_image, dtype=np.uint8)
 
         """Render"""
-        cv2.imshow("Stream", np.vstack((np.hstack((color_image1, color_image2)),
-                                        (np.hstack((depth_color_image1, depth_color_image2))),
-                                        np.hstack(color_image))))
+        cv2.imshow("Realsense", np.vstack((np.hstack((color_image1, color_image2)),
+                                           (np.hstack((depth_color_image1, depth_color_image2))))))
+        cv2.imshow("ZED", color_image)
         # out.write(combined)
         # key = cv2.waitKey(1)
 
